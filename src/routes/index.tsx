@@ -23,7 +23,7 @@ import project3 from "@/assets/project-3.jpg";
  *  Sem isso, o formulário continua funcionando visualmente, mas o envio
  *  retorna erro até o ID ser preenchido.
  */
-const FORMSPREE_FORM_ID = "SEU_ID_DO_FORMSPREE"; // <-- substitua aqui
+const FORMSPREE_FORM_ID = "https://formspree.io/f/myezeedv"; // <-- substitua aqui
 const FORMSPREE_ENDPOINT = `https://formspree.io/f/${FORMSPREE_FORM_ID}`;
 const CONTACT_EMAIL = "hyagojmaria@gmail.com";
 
