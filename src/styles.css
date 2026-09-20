@@ -1,0 +1,178 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Design system — Portfólio Hyago
+ * Dark mode monochrome: preto, tons de cinza e branco.
+ * Estética "frosted glass": vidro fosco sobre fundo escuro com orbs de luz.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Tipografia */
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  /* Cores semânticas (tokens mapeados para utilitários Tailwind) */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+}
+
+/*
+ * Paleta: o site é dark-only, então :root já recebe os valores escuros.
+ * Toda a hierarquia visual usa o branco (foreground) com diferentes opacidades.
+ */
+:root {
+  --radius: 1rem;
+
+  /* Fundo quase-preto com leve tom azulado (#0a0b10) */
+  --background: oklch(0.16 0.012 260);
+  --foreground: oklch(0.98 0.002 247);
+
+  /* Superfícies de vidro — cinza escuro translúcido */
+  --card: oklch(0.21 0.012 260);
+  --card-foreground: oklch(0.98 0.002 247);
+  --popover: oklch(0.21 0.012 260);
+  --popover-foreground: oklch(0.98 0.002 247);
+
+  /* Primary = branco (destaques e botões sólidos) */
+  --primary: oklch(0.98 0.002 247);
+  --primary-foreground: oklch(0.16 0.012 260);
+
+  --secondary: oklch(0.28 0.012 260);
+  --secondary-foreground: oklch(0.98 0.002 247);
+
+  --muted: oklch(0.26 0.01 260);
+  --muted-foreground: oklch(0.62 0.012 260);
+
+  /* Accent = branco suave para links e detalhes */
+  --accent: oklch(0.92 0.004 247);
+  --accent-foreground: oklch(0.16 0.012 260);
+
+  --destructive: oklch(0.6 0.2 25);
+  --destructive-foreground: oklch(0.98 0.002 247);
+
+  --border: oklch(0.98 0.002 247 / 12%);
+  --input: oklch(0.98 0.002 247 / 12%);
+  --ring: oklch(0.92 0.004 247 / 60%);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Compensa o header fixo ao rolar para âncoras */
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: oklch(0.98 0.002 247 / 85%);
+    color: oklch(0.16 0.012 260);
+  }
+
+  /* Barra de rolagem discreta */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-background);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(0.98 0.002 247 / 14%);
+    border-radius: 9999px;
+    border: 2px solid var(--color-background);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.98 0.002 247 / 26%);
+  }
+}
+
+/* ===== Animações ===== */
+
+/* Orbs de luz flutuando no fundo */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(4%, -6%) scale(1.08);
+  }
+}
+
+/* Reveal suave ao rolar (controlado por IntersectionObserver) */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.7s cubic-bezier(0.32, 0.72, 0, 1),
+    transform 0.7s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  @keyframes drift {
+    0%,
+    100% {
+      transform: none;
+    }
+  }
+}
+
+/* Utilitário: vídeo de grão sutil no vidro (opcional, sem assets externos) */
+@utility glass-panel {
+  background-color: oklch(0.98 0.002 247 / 4%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid var(--color-border);
+}
